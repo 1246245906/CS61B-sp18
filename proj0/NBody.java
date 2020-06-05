@@ -18,7 +18,7 @@ public class NBody{
 		 * Look like so stupid!!!
 		 */
 		for(int i = 0; i < n; i++){
-			planets[i] = new Planet();
+			planets[i] = new Planet(0,0,0,0,0,"");
 		}
 
 		for(int i = 0; i < n; i++){

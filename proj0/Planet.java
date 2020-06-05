@@ -3,8 +3,8 @@ public class Planet{
 	public double yyPos;
 	public double xxVel;
 	public double yyVel;
-	double mass;
-	String imgFileName;
+	public double mass;
+	public String imgFileName;
 
 	public Planet(double xP, double yP, double xV,
 				 double yV, double m, String img){
@@ -23,15 +23,6 @@ public class Planet{
 		yyVel = p.yyVel;
 		mass = p.mass;
 		imgFileName = p.imgFileName;
-	}
-
-	public Planet(){
-		xxPos = 0;
-		yyPos = 0;
-		xxVel = 0;
-		yyVel = 0;
-		mass = 0;
-		imgFileName = "null";
 	}
 
 	public double calcDistance(Planet p){
