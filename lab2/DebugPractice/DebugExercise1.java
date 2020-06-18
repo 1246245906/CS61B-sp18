@@ -3,8 +3,15 @@
  * feature work.
  */
 public class DebugExercise1 {
+//    public static int divideThenRound(int top, int bottom) {
+//        int quotient = top / bottom;
+//        int result = Math.round(quotient);
+//        return result;
+//    }
     public static int divideThenRound(int top, int bottom) {
-        int quotient = top / bottom;
+        float a = top;
+        float b = bottom;
+        float quotient = a / b;
         int result = Math.round(quotient);
         return result;
     }
