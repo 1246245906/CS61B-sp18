@@ -1,0 +1,14 @@
+# java
+*.class
+.idea
+
+# windows
+*.txt
+
+# library
+library-sp19
+
+# out
+out
+
+*.xml
