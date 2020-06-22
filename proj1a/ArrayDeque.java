@@ -39,7 +39,7 @@ public class ArrayDeque<T> {
     private void decreaseCapacity(int oldCapacity) {
         capacity = oldCapacity / 2;
         T[] a = (T []) new Object[capacity];
-        if(head > tail) {
+        if (head > tail) {
             System.arraycopy(items, tail, a, 0, head - tail);
         } else {
             System.arraycopy(items, tail, a, 0, oldCapacity - tail);
@@ -90,7 +90,7 @@ public class ArrayDeque<T> {
             decreaseCapacity(capacity);
         }
         if (size == 0) {
-        	return null;
+            return null;
         }
         head = (head - 1 + capacity) % capacity;
         T t = items[head];
