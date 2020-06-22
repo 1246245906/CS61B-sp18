@@ -1,8 +1,8 @@
 public class LinkedListDeque<T> {
-    private class TNode{                                // TODO private
-        public T item;
-        public TNode next;
-        public TNode prev;
+    private class TNode {                                // TODO private
+        private T item;
+        private TNode next;
+        private TNode prev;
 
         public TNode(T i, TNode p, TNode n) {
             item = i;
@@ -49,7 +49,7 @@ public class LinkedListDeque<T> {
 
     public void printDeque() {
         TNode ptr = sentinel.next;
-        while(ptr != sentinel){
+        while (ptr != sentinel) {
             System.out.print(ptr.item + " ");
             ptr = ptr.next;
         }
@@ -96,11 +96,11 @@ public class LinkedListDeque<T> {
         if (index == 0) {
             return p.item;
         }
-       return getRecursive(p.next, index - 1);
+        return getRecursive(p.next, index - 1);
     }
 
     public T getRecursive(int index) {
-        if (index <0 | index >= size) {
+        if (index < 0 | index >= size) {
             return null;
         }
         return getRecursive(sentinel.next, index);

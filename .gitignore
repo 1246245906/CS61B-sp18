@@ -1,6 +1,7 @@
 # java
 *.class
 .idea
+*.iml
 
 # windows
 *.txt
