@@ -101,7 +101,7 @@ public class ArrayDeque<T>{
 
     public void printDeque(){
         for(int i = 0; i < size; ++i){
-            System.out.print(items[(tail+i)%capacity]);
+            System.out.print(items[(tail+i)%capacity] + " ");
         }
     }
 }
