@@ -68,7 +68,7 @@ public class ArrayDeque<T> {
             increaseCapacity(capacity);
         }
         tail = (tail - 1 + capacity) % capacity;
-        items[tail] = e;                        // TODO boundry decision
+        items[tail] = e;
         ++size;
     }
 

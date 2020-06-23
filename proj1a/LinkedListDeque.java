@@ -1,5 +1,5 @@
 public class LinkedListDeque<T> {
-    private class TNode {                                // TODO private
+    private class TNode {
         private T item;
         private TNode next;
         private TNode prev;
