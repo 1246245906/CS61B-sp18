@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -81,11 +81,11 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        if(A == null){
+        if (A == null) {
             return B;
         }
         IntList ptr = A;
-        while(ptr.rest != null){
+        while (ptr.rest != null) {
             ptr = ptr.rest;
         }
         ptr.rest = B;
@@ -97,11 +97,11 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        if(A == null & B == null){
+        if (A == null & B == null) {
             return null;
         }
 
-        if(A != null) {
+        if (A != null) {
             IntList res = new IntList(A.first, null);
             IntList ptr = res;
             while (A.rest != null) {
@@ -109,21 +109,19 @@ public class IntList {
                 ptr.rest = new IntList(A.first, null);
                 ptr = ptr.rest;
             }
-            if(B != null){
+            if (B != null) {
                 ptr.rest = new IntList(B.first, null);
                 ptr = ptr.rest;
-                while(B.rest != null){
+                while (B.rest != null) {
                     B = B.rest;
                     ptr.rest = new IntList(B.first, null);
                     ptr = ptr.rest;
                 }
                 return res;
-            }
-            else{
+            } else {
                 return res;
             }
-        }
-        else {
+        } else {
             IntList res = new IntList(B.first, null);
             IntList ptr = res;
 
@@ -136,20 +134,18 @@ public class IntList {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public static IntList reverse(IntList A) {
+        IntList fontOfReverse = null;
+        IntList nextNodeToAdd = A;
+        while (nextNodeToAdd != null) {
+            IntList remainderOfOriginal = nextNodeToAdd.rest;
+            nextNodeToAdd.rest = fontOfReverse;
+            fontOfReverse = nextNodeToAdd;
+            nextNodeToAdd = remainderOfOriginal;
+        }
+        A = fontOfReverse;
+        return A;
+    }
 
     /**
      * DO NOT MODIFY ANYTHING BELOW THIS LINE! Many of the concepts below here
