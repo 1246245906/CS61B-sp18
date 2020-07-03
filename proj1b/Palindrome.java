@@ -1,4 +1,4 @@
-import java.util.concurrent.TransferQueue;
+//import java.util.concurrent.TransferQueue;
 
 public class Palindrome {
     public Deque<Character> wordToDeque(String word) {
@@ -11,7 +11,7 @@ public class Palindrome {
 
     public boolean isPalindrome(String word) {
         Deque wordDeque = wordToDeque(word);
-        while (wordDeque.size() > 1){
+        while (wordDeque.size() > 1) {
             if (wordDeque.removeFirst() != wordDeque.removeLast()) {
                 return false;
             }
@@ -39,4 +39,13 @@ public class Palindrome {
     }
     */
 
+    public boolean isPalindrome(String word, CharacterComparator cc) {
+        Deque<Character> wordDeque = wordToDeque(word);
+        while (wordDeque.size() > 1) {
+            if (!cc.equalChars(wordDeque.removeFirst(), wordDeque.removeLast())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
