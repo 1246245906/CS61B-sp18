@@ -1,5 +1,9 @@
 package synthesizer;
 
+//import edu.princeton.cs.algs4.In;
+
+import java.util.Iterator;
+
 public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
     /* Index for the next dequeue or peek. */
     private int first;            // index for the next dequeue or peek
@@ -35,9 +39,36 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
         this.capacity = capacity;
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    private class ArrayRingBufferIterator implements Iterator<T> {
+        private int wizPos;
+        private int count;
+
+        public ArrayRingBufferIterator() {
+            wizPos = first;
+            count = 0;
+        }
+
+        public boolean hasNext() {
+            return count < fillCount;
+        }
+
+        public T next() {
+            T returnItem = rb[wizPos];
+            wizPos = (wizPos + 1) % capacity;
+            count += 1;
+            return returnItem;
+        }
+    }
+
     public void enqueue(T x) {
         if (isFull()) {
-            resize(capacity * 2);
+//            resize(capacity * 2);
+            throw new RuntimeException("Ring Buffer Overflow");
         }
         rb[last] = x;
         last = (last + 1) % capacity;
@@ -50,6 +81,9 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
      * covered Monday.
      */
     public T dequeue() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer Underflow");
+        }
         T item = rb[first];
         first = (first + 1) % capacity;
         fillCount -= 1;
@@ -61,6 +95,18 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
      */
     public T peek() {
         return rb[first];
+    }
+
+    public static void main(String[] args) {
+        ArrayRingBuffer<Integer> aset = new ArrayRingBuffer<Integer>(4);
+        aset.enqueue(5);
+        aset.enqueue(23);
+        aset.enqueue(42);
+
+        //iteration
+        for (int i : aset) {
+            System.out.println(i);
+        }
     }
 
     // TODO: When you get to part 5, implement the needed code to support iteration.
