@@ -1,9 +1,5 @@
 package synthesizer;
 
-//import edu.princeton.cs.algs4.In;
-
-import edu.princeton.cs.algs4.In;
-
 import java.util.Iterator;
 
 public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
@@ -96,19 +92,9 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
      * Return oldest item, but don't remove it.
      */
     public T peek() {
+        if (isEmpty()) {
+            throw new RuntimeException("Ring Buffer Underflow");
+        }
         return rb[first];
     }
-
-//    public static void main(String[] args) {
-//        ArrayRingBuffer<Integer> b = new ArrayRingBuffer<Integer>(4);
-//        b.enqueue(1);
-//        b.enqueue(1);
-//        b.enqueue(1);
-//        b.enqueue(1);
-//        b.dequeue();
-//        b.dequeue();
-//        b.dequeue();
-//        b.dequeue();
-//        b.dequeue();
-//    }
 }
