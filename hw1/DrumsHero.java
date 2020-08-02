@@ -1,9 +1,9 @@
 public class DrumsHero {
 
     public static void main(String[] args) {
-        synthesizer.DrumsString[] GS = new synthesizer.DrumsString[37];
+        synthesizer.DrumsString[] dh = new synthesizer.DrumsString[37];
         for (int i = 0; i < 37; i += 1) {
-            GS[i] = new synthesizer.DrumsString(440 * Math.pow(2, (i - 24) / 12.0));
+            dh[i] = new synthesizer.DrumsString(440 * Math.pow(2, (i - 24) / 12.0));
         }
 
         while (true) {
@@ -11,21 +11,21 @@ public class DrumsHero {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
                 for (int i = 0; i < 37; i += 1) {
-                    if(key == keyboard.charAt(i)) {
-                        GS[i].pluck();
+                    if (key == keyboard.charAt(i)) {
+                        dh[i].pluck();
                     }
                 }
             }
 
             double sample = 0.0;
-            for (int i = 0; i < GS.length; i += 1) {
-                sample += GS[i].sample();
+            for (int i = 0; i < dh.length; i += 1) {
+                sample += dh[i].sample();
             }
 
             StdAudio.play(sample);
 
-            for (int i = 0; i < GS.length; i += 1) {
-                GS[i].tic();
+            for (int i = 0; i < dh.length; i += 1) {
+                dh[i].tic();
             }
         }
     }

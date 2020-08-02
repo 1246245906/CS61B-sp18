@@ -9,7 +9,7 @@ public class HarpString {
 
     /* Create a guitar string of the given frequency.  */
     public HarpString(double frequency) {
-        buffer = new ArrayRingBuffer<Double>((int)Math.round(SR / frequency) * 2);
+        buffer = new ArrayRingBuffer<Double>((int) Math.round(SR / frequency) * 2);
         while (!buffer.isFull()) {
             buffer.enqueue(.0);
         }
@@ -35,7 +35,6 @@ public class HarpString {
 
     /* Return the double at the front of the buffer. */
     public double sample() {
-        // TODO: Return the correct thing.
         return buffer.peek();
     }
 }

@@ -2,6 +2,8 @@ package synthesizer;
 
 //import edu.princeton.cs.algs4.In;
 
+import edu.princeton.cs.algs4.In;
+
 import java.util.Iterator;
 
 public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
@@ -31,8 +33,8 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
      */
     private void resize(int capacity) {
         T[] temp = (T[]) new Object[capacity];
-        System.arraycopy(rb, first, temp, 0, capacity/2 - first);
-        System.arraycopy(rb, 0, temp, capacity/2 - first, last);
+        System.arraycopy(rb, first, temp, 0, capacity / 2 - first);
+        System.arraycopy(rb, 0, temp, capacity / 2 - first, last);
         rb = temp;
         first = 0;
         last = fillCount;
@@ -97,17 +99,16 @@ public class ArrayRingBuffer<T>  extends AbstractBoundedQueue<T> {
         return rb[first];
     }
 
-    public static void main(String[] args) {
-        ArrayRingBuffer<Integer> aset = new ArrayRingBuffer<Integer>(4);
-        aset.enqueue(5);
-        aset.enqueue(23);
-        aset.enqueue(42);
-
-        //iteration
-        for (int i : aset) {
-            System.out.println(i);
-        }
-    }
-
-    // TODO: When you get to part 5, implement the needed code to support iteration.
+//    public static void main(String[] args) {
+//        ArrayRingBuffer<Integer> b = new ArrayRingBuffer<Integer>(4);
+//        b.enqueue(1);
+//        b.enqueue(1);
+//        b.enqueue(1);
+//        b.enqueue(1);
+//        b.dequeue();
+//        b.dequeue();
+//        b.dequeue();
+//        b.dequeue();
+//        b.dequeue();
+//    }
 }

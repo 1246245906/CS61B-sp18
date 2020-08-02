@@ -2,7 +2,8 @@ package synthesizer;
 
 import java.util.Iterator;
 
-public interface BoundedQueue<T> extends Iterable<T> {          // <T> can't omit, omit <T> behind Iterable will cause strange error.
+public interface BoundedQueue<T> extends Iterable<T> {
+    // <T> can't omit, omit <T> behind Iterable will cause strange error.
     Iterator iterator();
     int capacity();     // return size of the buffer
     int fillCount();    // return number of items currently in the buffer
