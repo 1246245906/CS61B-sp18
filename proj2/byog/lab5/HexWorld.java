@@ -38,35 +38,52 @@ public class HexWorld {
         }
     }
 
-    public static int calRowFirstPosX(int i, Position firstPos, int hexagonSize) {
-        return (firstPos.x + hexagonSize * 2 * i - i);
+    /**
+     * This method is to calculate first hexagon's position of given row
+     * @param rowNum: the row number of big hexagon you want to calculate.
+     * @param firstPos: first hexagon's position.
+     * @param hexagonSize: size of small hexagon
+     * @return x position of first hexagon for given row.
+     * */
+    public static int calRowFirstPosX(int rowNum, Position firstPos, int hexagonSize) {
+        return (firstPos.x + hexagonSize * 2 * rowNum - rowNum);
     }
 
-    public static int calRowFirstPosY(int i, Position firstPos, int hexagonSize) {
-        if (i > 2) {
-            return calRowFirstPosY(4 - i, firstPos, hexagonSize);
+    /**
+     * @return x position of first hexagon for given row.
+     * */
+    public static int calRowFirstPosY(int rowNum, Position firstPos, int hexagonSize) {
+        if (rowNum > 2) {
+            return calRowFirstPosY(4 - rowNum, firstPos, hexagonSize);
         }
-        return firstPos.y - hexagonSize * i;
+        return firstPos.y - hexagonSize * rowNum;
     }
 
-    public static Position calRowFirstPos(int i, Position firstPos, int hexagonSize) {
-        int x = calRowFirstPosX(i, firstPos, hexagonSize);
-        int y = calRowFirstPosY(i, firstPos, hexagonSize);
+    /**
+     * @return position of first hexagon for given row.
+     * */
+    public static Position calRowFirstPos(int rowNum, Position firstPos, int hexagonSize) {
+        int x = calRowFirstPosX(rowNum, firstPos, hexagonSize);
+        int y = calRowFirstPosY(rowNum, firstPos, hexagonSize);
         Position p = new Position(x, y);
         return p;
     }
 
-    public static Position[] calRowPos(int i, int num, Position firstPos, int hexagonSize) {
+    /**
+     * @return position of first hexagon for every row.
+     * */
+    public static Position[] calRowPos(int rowNum, int num, Position firstPos, int hexagonSize) {
         Position[] p = new Position[num];
-        Position rowFirst = calRowFirstPos(i, firstPos, hexagonSize);
+        Position rowFirst = calRowFirstPos(rowNum, firstPos, hexagonSize);
         for (int j = 0; j < num; j += 1) {
-//            p[j].x = rowFirst.x;
-//            p[j].y = rowFirst.y + 6 * j;
             p[j] = new Position(rowFirst.x, rowFirst.y + hexagonSize * 2 * j);
         }
         return p;
     }
 
+    /**
+     * @return the number of small hexagon for given row.
+     * */
     public static int hexNum(int i) {
         if (i > 2) {
             return hexNum(4 - i);
@@ -74,6 +91,9 @@ public class HexWorld {
         return 3 + i;
     }
 
+    /**
+     * @return an random TETile with different color and graph.
+     * */
     public static TETile randomTETile() {
         int tileNum = RANDOM.nextInt(4);
         switch (tileNum) {
@@ -85,18 +105,18 @@ public class HexWorld {
         }
     }
 
-    public static void drawRow(TETile[][] world, int hexagonSize, int i, Position firstPos) {
-        int num = hexNum(i);
+    public static void drawRow(TETile[][] world, int hexagonSize, int rowNum, Position firstPos) {
+        int num = hexNum(rowNum);
         Position[] p;
-        p = calRowPos(i, num, firstPos, hexagonSize);
+        p = calRowPos(rowNum, num, firstPos, hexagonSize);
         for (int j = 0; j < num; j += 1) {
             addHexagon(world, p[j], hexagonSize, randomTETile());
         }
     }
 
     public static void drawWorld(TETile[][] world, int hexagonSize, Position firstPos) {
-        for (int i = 0; i < 5; i += 1) {
-            drawRow(world, hexagonSize, i, firstPos);
+        for (int rowNum = 0; rowNum < 5; rowNum += 1) {
+            drawRow(world, hexagonSize, rowNum, firstPos);
         }
     }
 
@@ -116,15 +136,8 @@ public class HexWorld {
         // initialize tiles
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         initialize(world);
-//        addHexagon(world,new Position(8, 10), 3, Tileset.FLOWER);
-//        addHexagon(world,new Position(15, 10),3, Tileset.FLOOR);
-//        addHexagon(world,new Position(22, 10), 3, Tileset.GRASS);
 
-//        for (int i = 1; i < 5; i += 1) {
-//            drawRow(world, 3, i, new Position(10, 10));
-//        }
-        drawWorld(world, 2, new Position(10, 20));
-
+        drawWorld(world, 4, new Position(10, 20));
         ter.renderFrame(world);
 
     }
