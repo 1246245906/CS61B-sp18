@@ -12,6 +12,7 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
+    private Random RANDOM;
 
     private static class Position {
         public int x;
@@ -22,23 +23,11 @@ public class Game {
         }
     }
 
-//    private Position currentPos;
-//    private int currentSize;
-//    private Stack<Position> s;
-//
-//    public Game() {
-//        currentPos = new Position(WIDTH / 2, HEIGHT / 2);
-//        currentSize = 0;
-//        s = new Stack<Position>();
-//    }
-
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
     }
-
-
 
     /**
      * Method used for autograding and testing the game code. The input string will be a series
@@ -59,74 +48,97 @@ public class Game {
 
         char option = findOption(input);
         long seed = findSeed(input);
+        RANDOM = new Random(seed);
 
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         initializeTiles(finalWorldFrame);
 
-        generateFloor(finalWorldFrame, seed);
+        generateFloor(finalWorldFrame);
 
-        ter.renderFrame(finalWorldFrame);
+        removeWall(finalWorldFrame);
+
+//        ter.renderFrame(finalWorldFrame);
 
         return finalWorldFrame;
     }
 
-    private void generateFloor(TETile[][] world, long seed) {
-        Position currentPos = new Position(WIDTH / 2, HEIGHT / 2);
-        int currentSize = 0;
-        Stack<Position> positionStack = new Stack<Position>();
-        positionStack.push(currentPos);
-
-        world[currentPos.x][currentPos.y] = Tileset.FLOOR;
-
-        while (currentSize <= (HEIGHT * WIDTH) / 6) {
-            currentPos = newPos(world, seed, currentPos, positionStack);
-            world[currentPos.x][currentPos.y] = Tileset.FLOOR;
-            currentSize += 1;
+    private void removeWall(TETile[][] world) {
+        Stack<Position> s = new Stack<Position>();
+        for (int i = 1; i < WIDTH - 1; i += 1) {
+            for (int j = 1; j < HEIGHT - 1; j++) {
+                if (world[i][j].equals(Tileset.WALL) & countNeighbor(world, new Position(i, j)) >= 8) {
+                    s.push(new Position(i, j));
+                }
+            }
+        }
+        while (!s.empty()) {
+            Position p = s.pop();
+            world[p.x][p.y] = Tileset.NOTHING;
         }
     }
 
-    private Position newPos(TETile[][] world, long seed, Position currentPos, Stack<Position> positionStack) {
-//        int posX = currentPos.x;
-//        int posY = currentPos.y;
-        Position pos = new Position(currentPos.x, currentPos.y);
-        Random RANDOM = new Random();
-//        boolean valid = true;
-        int dir = RANDOM.nextInt(4);
-        //            default: pos.y += 1;             // move above
-        switch (dir) {
-            case 0 -> pos.x += 1;// move right
-            case 1 -> pos.x -= 1;// move left
-            case 2 -> pos.y -= 1;
-            case 3 -> pos.y += 1;
+    private void generateFloor(TETile[][] world) {
+        RandomTheWorld(world);
+        int i = 0;
+        while(i < 5) {
+            improveWorld(world);
+            i += 1;
         }
+    }
 
-        if (!isValid(world, pos)) {
-            pos = newPos(world, seed, prePosition(positionStack, RANDOM), positionStack);      // todo: too many times.
+    private void improveWorld(TETile[][] world) {
+        for (int i = 1; i < WIDTH - 1; i += 1) {
+            for (int j = 1; j < HEIGHT - 1; j ++) {
+                if (!world[i][j].equals(Tileset.WALL) & (countNeighbor(world, new Position(i, j)) > 5)) {
+                    world[i][j] = Tileset.WALL;
+                } else if (world[i][j].equals(Tileset.WALL) & (countNeighbor(world, new Position(i, j)) < 4)) {
+                    world[i][j] = Tileset.FLOOR;
+                }
+            }
         }
-
-        positionStack.push(pos);
-        return pos;
     }
 
-    private boolean isValid(TETile[][] world, Position pos) {
-        return pos.x > 0 & pos.x < WIDTH - 1 & pos.y > 0 & pos.y < HEIGHT - 1
-                & world[pos.x][pos.y].equals(Tileset.NOTHING);
+    private int countNeighbor2(TETile[][] world, Position position) {
+        int count = 0;
+        for (int i = -2; i < 3; i += 1) {
+            for (int j = -2; j < 3; j += 1) {
+                if (position.x + i <= 0 | position.y + j <= 0 | position.x + i >= WIDTH | position.y + j >= HEIGHT) {
+                    continue;
+                }
+                if (world[position.x + i][position.y + j].equals(Tileset.WALL)) {
+                    count += 1;
+                }
+            }
+        }
+        return count;
     }
 
-    private Position prePosition(Stack<Position> positionStack, Random random) {
-//        int a = positionStack.size();       // todo:
-//        int randomNum = random.nextInt(positionStack.size());
-//        int i = 0;
-//        while (i < randomNum - 1) {
-//            positionStack.pop();
-//            i += 1;
-//        }
-        return positionStack.pop();
+    private int countNeighbor(TETile[][] world, Position position) {
+        int count = 0;
+        if (world[position.x + 1][position.y] == Tileset.WALL) count += 1;
+        if (world[position.x - 1][position.y] == Tileset.WALL) count += 1;
+        if (world[position.x + 1][position.y + 1] == Tileset.WALL) count += 1;
+        if (world[position.x - 1][position.y + 1] == Tileset.WALL) count += 1;
+        if (world[position.x + 1][position.y - 1] == Tileset.WALL) count += 1;
+        if (world[position.x - 1][position.y - 1] == Tileset.WALL) count += 1;
+        if (world[position.x][position.y + 1] == Tileset.WALL) count += 1;
+        if (world[position.x][position.y - 1] == Tileset.WALL) count += 1;
+        return count;
     }
 
+    private void RandomTheWorld(TETile[][] world) {
+        for (int i = 1; i < WIDTH - 1; i += 1) {
+            for (int j = 1; j < HEIGHT - 1; j ++) {
+                double r = RandomUtils.uniform(RANDOM);
+                if (r < 0.4) {
+                    world[i][j] = Tileset.FLOOR;
+                }
+            }
+        }
+    }
 
     private long findSeed(String input) {
-        return 1231254;         // TODO:
+        return 8795418;         // TODO:
     }
 
     private char findOption(String input) {
@@ -136,7 +148,7 @@ public class Game {
     private void initializeTiles(TETile[][] finalWorldFrame) {
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
-                finalWorldFrame[x][y] = Tileset.NOTHING;
+                finalWorldFrame[x][y] = Tileset.WALL;
             }
         }
     }

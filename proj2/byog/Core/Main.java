@@ -3,6 +3,8 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 
+import java.util.Random;
+
 /** This is the main entry point for the program. This class simply parses
  *  the command line inputs, and lets the byog.Core.Game class take over
  *  in either keyboard or input string mode.
@@ -20,12 +22,18 @@ public class Main {
 //            Game game = new Game();
 //            game.playWithKeyboard();
 //        }
+
+//        Random r = new Random(8798798);
+//        for (int i = 0; i < 10; i ++) {
+//            System.out.println(RandomUtils.uniform(r));
+//        }
+
         Game game = new Game();
         TETile[][] worldState = game.playWithInputString("11");
 
         TERenderer ter = new TERenderer();
         ter.initialize(80, 30);
         ter.renderFrame(worldState);
-//        System.out.println(TETile.toString(worldState));
+        System.out.println(TETile.toString(worldState));
     }
 }
