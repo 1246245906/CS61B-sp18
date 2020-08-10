@@ -4,7 +4,6 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
@@ -17,7 +16,7 @@ public class Game {
     TETile[][] world;
     Stack<Room> rooms;
 
-    public class Room {
+    private class Room {
         Position p1;
         Position p2;
         int doorNum;
@@ -63,16 +62,11 @@ public class Game {
         public void addRoom() {
             for (int i = p1.x; i <= p2.x; i += 1) {
                 for (int j = p1.y; j <= p2.y; j += 1) {
-                    world[i][j] = Tileset.FLOOR;
+                    world[i][j] = randomFloor();
                 }
             }
         }
     }
-
-//    public class corridor {
-//        Position p1;
-//        Position p2;
-//    }
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -96,41 +90,73 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-
         char option = findOption(input);
-        long seed = findSeed(input);
-        RANDOM = new Random(seed);
-        rooms = new Stack<>();
+        play(option, input);
 
-        world = new TETile[WIDTH][HEIGHT];
-
-        initializeTiles(world);
-//        generateFloor(world);
-        // todo: do not use cellular automata, try to create room and corridors and assemble them.
-        generateRoom();
-        addCorridors();
-
-//        removeWall(world);
         TETile[][] finalWorldFrame = world;
         return finalWorldFrame;
     }
 
+    private void play(char op, String input) {
+        if (op != 'N') {
+            throw new IllegalArgumentException("invalid argument: press N to begin.");
+        }
+        initialize(input);
+        initializeTiles(world);
+        generateWorld();
+        ter.renderFrame(world);
+    }
+
+    private void generateWorld() {
+        generateRoom();
+        addCorridors();
+        removeWall(world);
+    }
+
+    private void initialize(String input) {
+        long seed = findSeed(input);
+        RANDOM = new Random(seed);
+        rooms = new Stack<>();
+        ter.initialize(WIDTH, HEIGHT);
+
+        world = new TETile[WIDTH][HEIGHT];
+    }
+
     private void addCorridors() {
-        while (!rooms.empty()){
+        while (rooms.size() >= 2){
             addCorridor(rooms.pop(), rooms.peek());
         }
     }
 
-    // TODO: finished it
     private void addCorridor(Room r1, Room r2) {
-//        for (int i = );
+//        double d = RandomUtils.uniform(RANDOM);
+        if(r1.doorPs[0].x >= r2.doorPs[0].x) {
+            for (int i = r1.doorPs[0].x; i >= r2.doorPs[0].x; i -= 1) {
+                world[i][r1.doorPs[0].y] = randomFloor();
+            }
+        }
+        if(r1.doorPs[0].x <= r2.doorPs[0].x) {
+            for (int i = r1.doorPs[0].x; i <= r2.doorPs[0].x; i += 1) {
+                world[i][r1.doorPs[0].y] = randomFloor();
+            }
+        }
+        if (r1.doorPs[0].y <= r2.doorPs[0].y) {
+            for (int i = r1.doorPs[0].y; i <= r2.doorPs[0].y; i += 1) {
+                world[r2.doorPs[0].x][i] = randomFloor();
+            }
+        }
+        if (r1.doorPs[0].y > r2.doorPs[0].y) {
+            for (int i = r1.doorPs[0].y; i >= r2.doorPs[0].y; i -= 1) {
+                world[r2.doorPs[0].x][i] = randomFloor();
+            }
+        }
     }
 
     private void generateRoom() {
         for (int i = 1; i <= WIDTH - 3; i += 2) {
             for (int j = 1; j <= HEIGHT - 3; j += 2) {
                 double random = RandomUtils.uniform(RANDOM);
-                if (random > 0.94) {
+                if (random > 0.92) {
                     Room r = new Room(new Position(i, j));
                     if (nearPre(r)) {
                         continue;
@@ -157,9 +183,9 @@ public class Game {
 
     private void removeWall(TETile[][] world) {
         Stack<Position> s = new Stack<Position>();
-        for (int i = 1; i < WIDTH - 1; i += 1) {
-            for (int j = 1; j < HEIGHT - 1; j++) {
-                if (world[i][j].equals(Tileset.WALL) & countNeighbor(world, new Position(i, j)) >= 8) {
+        for (int i = 0; i < WIDTH; i += 1) {
+            for (int j = 0; j < HEIGHT; j++) {
+                if (world[i][j].equals(Tileset.WALL) & countNeighbor(world, new Position(i, j)) == 8) {
                     s.push(new Position(i, j));
                 }
             }
@@ -170,6 +196,56 @@ public class Game {
         }
     }
 
+    private int countNeighbor(TETile[][] world, Position position) {
+        int count = 0;
+        for (int i = -1; i < 2; i += 1) {
+            for (int j = -1; j < 2; j += 1) {
+                if(i == 0 & j == 0) {
+                    continue;
+                }
+                if (position.x + i < 0 | position.y + j < 0 | position.x + i >= WIDTH | position.y + j >= HEIGHT) {
+                    count += 1;
+                    continue;
+                }
+                if (world[position.x + i][position.y + j].equals(Tileset.WALL)) {
+                    count += 1;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @source: https://stackoverflow.com/questions/3481828/how-to-split-a-string-in-java
+     * @source: https://stackoverflow.com/questions/5585779/how-do-i-convert-a-string-to-an-int-in-java
+     * */
+    private long findSeed(String input) {
+        String[] parts = input.split("N");
+        String[] op = parts[1].split("L");
+        return Integer.parseInt(op[0]);
+    }
+
+    private char findOption(String input) {
+        return input.charAt(0);
+    }
+
+    private void initializeTiles(TETile[][] finalWorldFrame) {
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                finalWorldFrame[x][y] = randomWall();
+            }
+        }
+    }
+
+    private TETile randomWall() {
+        return TETile.colorVariant(Tileset.WALL, 50, 50, 50, new Random());
+    }
+
+    private TETile randomFloor() {
+        return TETile.colorVariant(Tileset.FLOOR, 50, 50, 50, new Random());
+    }
+
+///**old code, using cellular automata*/
 //    private void generateFloor(TETile[][] finalWorldFrame) {
 //        initializeTiles(finalWorldFrame);
 //    }
@@ -221,33 +297,4 @@ public class Game {
 //        }
 //    }
 //}
-
-    private int countNeighbor(TETile[][] world, Position position) {
-        int count = 0;
-        if (world[position.x + 1][position.y] == Tileset.WALL) count += 1;
-        if (world[position.x - 1][position.y] == Tileset.WALL) count += 1;
-        if (world[position.x + 1][position.y + 1] == Tileset.WALL) count += 1;
-        if (world[position.x - 1][position.y + 1] == Tileset.WALL) count += 1;
-        if (world[position.x + 1][position.y - 1] == Tileset.WALL) count += 1;
-        if (world[position.x - 1][position.y - 1] == Tileset.WALL) count += 1;
-        if (world[position.x][position.y + 1] == Tileset.WALL) count += 1;
-        if (world[position.x][position.y - 1] == Tileset.WALL) count += 1;
-        return count;
-    }
-
-    private long findSeed(String input) {
-        return 87985418;         // TODO:
-    }
-
-    private char findOption(String input) {
-        return 'N';           // TODO:
-    }
-
-    private void initializeTiles(TETile[][] finalWorldFrame) {
-        for (int x = 0; x < WIDTH; x += 1) {
-            for (int y = 0; y < HEIGHT; y += 1) {
-                finalWorldFrame[x][y] = Tileset.WALL;
-            }
-        }
-    }
 }
