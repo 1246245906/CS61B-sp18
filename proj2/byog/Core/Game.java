@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Game {
-    TERenderer ter = new TERenderer();
+    private TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -28,8 +28,8 @@ public class Game {
         }
 
         private void initiateRoom() {
-            int x = Math.min(p1.x + RandomUtils.uniform(RANDOM, 2,6), WIDTH - 2);
-            int y = Math.min(p1.y + RandomUtils.uniform(RANDOM, 2,6), HEIGHT - 2);
+            int x = Math.min(p1.x + RandomUtils.uniform(RANDOM, 2, 6), WIDTH - 2);
+            int y = Math.min(p1.y + RandomUtils.uniform(RANDOM, 2, 6), HEIGHT - 2);
             p2 = new Position(x, y);
             doorNum = RandomUtils.uniform(RANDOM, 1, 3);
             randomDoorPosition();
@@ -39,10 +39,14 @@ public class Game {
 //            doorPs = new Position[doorNum];
 //            for (int i = 0; i < doorNum; i += 1) {
 //                switch (chooseDoorDir()) {
-//                    case 'D' -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
-//                    case 'L' -> doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-//                    case 'R' -> doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-//                    default -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
+//                    case 'D' -> doorPs[i] = new Position
+//                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
+//                    case 'L' -> doorPs[i] = new Position
+//                    (p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+//                    case 'R' -> doorPs[i] = new Position
+//                    (p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+//                    default -> doorPs[i] = new Position
+//                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
 //                }
 //            }
 //        }
@@ -62,20 +66,23 @@ public class Game {
             doorPs = new Position[doorNum];
             for (int i = 0; i < doorNum; i += 1) {
                 switch (chooseDoorDir()) {
-                    case 'D':{
-                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
+                    case 'D': {
+                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p1.y);
                         continue;
                     }
-                    case 'L' :{
-                        doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                    case 'L': {
+                        doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
                         continue;
                     }
-                    case 'R':{
-                        doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                    case 'R': {
+                        doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
                         continue;
                     }
-                    case 'U':{
-                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
+                    case 'U': {
+                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
+                    }
+                    default: {
+                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
                     }
                 }
             }
@@ -84,20 +91,20 @@ public class Game {
         private char chooseDoorDir() {
             int r = RandomUtils.uniform(RANDOM, 4);
             switch (r) {
-                case 1:{
+                case 1: {
                     return 'D';
                 }
                 case 2: {
                     return 'L';
                 }
-                case 3:{
+                case 3: {
                     return 'R';
                 }
-                case 0:{
+                case 0: {
                     return 'U';
                 }
-            };
-            return 'U';
+                default: return 'U';
+            }
         }
 
         public void addRoom() {
@@ -128,7 +135,6 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
         char option = findOption(input);
@@ -267,7 +273,8 @@ public class Game {
     }
 
     private char findOption(String input) {
-        return input.charAt(0);
+//        return input.charAt(0);
+        return 'N';
     }
 
     private void initializeTiles(TETile[][] finalWorldFrame) {
