@@ -35,28 +35,69 @@ public class Game {
             randomDoorPosition();
         }
 
+//        private void randomDoorPosition() {
+//            doorPs = new Position[doorNum];
+//            for (int i = 0; i < doorNum; i += 1) {
+//                switch (chooseDoorDir()) {
+//                    case 'D' -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
+//                    case 'L' -> doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+//                    case 'R' -> doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+//                    default -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
+//                }
+//            }
+//        }
+//
+//        private char chooseDoorDir() {
+//            int r = RandomUtils.uniform(RANDOM, 4);
+//            return switch (r) {
+//                case 1 -> 'D';
+//                case 2 -> 'L';
+//                case 3 -> 'R';
+//                default -> 'U';
+//            };
+//        }
+
+        /**above can't passed in auto grader*/
         private void randomDoorPosition() {
             doorPs = new Position[doorNum];
             for (int i = 0; i < doorNum; i += 1) {
                 switch (chooseDoorDir()) {
-//                    case 'U' -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
-                    case 'D' -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
-                    case 'L' -> doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-                    case 'R' -> doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-                    default -> doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
+                    case 'D':{
+                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
+                        continue;
+                    }
+                    case 'L' :{
+                        doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                        continue;
+                    }
+                    case 'R':{
+                        doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                        continue;
+                    }
+                    case 'U':{
+                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
+                    }
                 }
             }
         }
 
         private char chooseDoorDir() {
             int r = RandomUtils.uniform(RANDOM, 4);
-            return switch (r) {
-//                case 0 -> 'U';
-                case 1 -> 'D';
-                case 2 -> 'L';
-                case 3 -> 'R';
-                default -> 'U';
+            switch (r) {
+                case 1:{
+                    return 'D';
+                }
+                case 2: {
+                    return 'L';
+                }
+                case 3:{
+                    return 'R';
+                }
+                case 0:{
+                    return 'U';
+                }
             };
+            return 'U';
         }
 
         public void addRoom() {
