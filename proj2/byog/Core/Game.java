@@ -157,7 +157,7 @@ public class Game {
     private void generateWorld() {
         generateRoom();
         addCorridors();
-        removeWall(world);
+        removeWall();
     }
 
     private void initialize(String input) {
@@ -170,19 +170,19 @@ public class Game {
     }
 
     private void addCorridors() {
-        while (rooms.size() >= 2){
+        while (rooms.size() >= 2) {
             addCorridor(rooms.pop(), rooms.peek());
         }
     }
 
     private void addCorridor(Room r1, Room r2) {
 //        double d = RandomUtils.uniform(RANDOM);
-        if(r1.doorPs[0].x >= r2.doorPs[0].x) {
+        if (r1.doorPs[0].x >= r2.doorPs[0].x) {
             for (int i = r1.doorPs[0].x; i >= r2.doorPs[0].x; i -= 1) {
                 world[i][r1.doorPs[0].y] = randomFloor();
             }
         }
-        if(r1.doorPs[0].x <= r2.doorPs[0].x) {
+        if (r1.doorPs[0].x <= r2.doorPs[0].x) {
             for (int i = r1.doorPs[0].x; i <= r2.doorPs[0].x; i += 1) {
                 world[i][r1.doorPs[0].y] = randomFloor();
             }
@@ -220,7 +220,7 @@ public class Game {
         for (int i = r.p1.y - 1; i <= r.p2.y + 1; i += 1) {
             if (world[r.p1.x][i].equals(Tileset.FLOOR)) {
                 return true;
-            } else if (world[r.p1.x-1][i].equals(Tileset.FLOOR)) {
+            } else if (world[r.p1.x - 1][i].equals(Tileset.FLOOR)) {
                 return true;
             }
         }
@@ -228,11 +228,12 @@ public class Game {
 //        return world[i][j].equals(Tileset.FLOOR);
     }
 
-    private void removeWall(TETile[][] world) {
+    private void removeWall() {
         Stack<Position> s = new Stack<Position>();
         for (int i = 0; i < WIDTH; i += 1) {
             for (int j = 0; j < HEIGHT; j++) {
-                if (world[i][j].equals(Tileset.WALL) & countNeighbor(world, new Position(i, j)) == 8) {
+                if (world[i][j].equals(Tileset.WALL)
+                    & countNeighbor(new Position(i, j)) == 8) {
                     s.push(new Position(i, j));
                 }
             }
@@ -243,14 +244,15 @@ public class Game {
         }
     }
 
-    private int countNeighbor(TETile[][] world, Position position) {
+    private int countNeighbor(Position position) {
         int count = 0;
         for (int i = -1; i < 2; i += 1) {
             for (int j = -1; j < 2; j += 1) {
-                if(i == 0 & j == 0) {
+                if (i == 0 & j == 0) {
                     continue;
                 }
-                if (position.x + i < 0 | position.y + j < 0 | position.x + i >= WIDTH | position.y + j >= HEIGHT) {
+                if (position.x + i < 0 | position.y + j < 0
+                    | position.x + i >= WIDTH | position.y + j >= HEIGHT) {
                     count += 1;
                     continue;
                 }
@@ -263,13 +265,14 @@ public class Game {
     }
 
     /**
-     * @source: https://stackoverflow.com/questions/3481828/how-to-split-a-string-in-java
-     * @source: https://stackoverflow.com/questions/5585779/how-do-i-convert-a-string-to-an-int-in-java
+     * @source: https://stackoverflow.com/questions/3481828
+     * @source: https://stackoverflow.com/questions/5585779
      * */
     private long findSeed(String input) {
-        String[] parts = input.split("N");
-        String[] op = parts[1].split("L");
-        return Integer.parseInt(op[0]);
+//        String[] parts = input.split("N");
+//        String[] op = parts[1].split("L");
+//        return Integer.parseInt(op[0]);
+        return Integer.parseInt(input);
     }
 
     private char findOption(String input) {
@@ -292,57 +295,4 @@ public class Game {
     private TETile randomFloor() {
         return TETile.colorVariant(Tileset.FLOOR, 50, 50, 50, new Random());
     }
-
-///**old code, using cellular automata*/
-//    private void generateFloor(TETile[][] finalWorldFrame) {
-//        initializeTiles(finalWorldFrame);
-//    }
-//    private void generateFloor1(TETile[][] world) {
-//        RandomTheWorld(world);
-//        int i = 0;
-//        while(i < 5) {
-//            improveWorld(world);
-//            i += 1;
-//        }
-//    }
-//
-//    private void improveWorld(TETile[][] world) {
-//        for (int i = 1; i < WIDTH - 1; i += 1) {
-//            for (int j = 1; j < HEIGHT - 1; j ++) {
-//                if (!world[i][j].equals(Tileset.WALL) & (countNeighbor(world, new Position(i, j)) > 5)) {
-//                    world[i][j] = Tileset.WALL;
-//                } else if (world[i][j].equals(Tileset.WALL) & (countNeighbor(world, new Position(i, j)) < 4)) {
-//                    world[i][j] = Tileset.FLOOR;
-//                } else if (world[i][j].equals(Tileset.FLOOR) & (countNeighbor2(world, new Position(i, j)) > 18)) {
-//                    world[i][j] = Tileset.WALL;
-//                }
-//            }
-//        }
-//    }
-//
-//    private int countNeighbor2(TETile[][] world, Position position) {
-//        int count = 0;
-//        for (int i = -2; i < 3; i += 1) {
-//            for (int j = -2; j < 3; j += 1) {
-//                if (position.x + i <= 0 | position.y + j <= 0 | position.x + i >= WIDTH | position.y + j >= HEIGHT) {
-//                    count += 1;
-//                    continue;
-//                }
-//                if (world[position.x + i][position.y + j].equals(Tileset.WALL)) {
-//                    count += 1;
-//                }
-//            }
-//        }
-//        return count;
-//    }
-//private void RandomTheWorld(TETile[][] world) {
-//    for (int i = 1; i < WIDTH - 1; i += 1) {
-//        for (int j = 1; j < HEIGHT - 1; j ++) {
-//            double r = RandomUtils.uniform(RANDOM);
-//            if (r < 0.4) {
-//                world[i][j] = Tileset.FLOOR;
-//            }
-//        }
-//    }
-//}
 }
