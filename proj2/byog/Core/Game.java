@@ -1,6 +1,6 @@
 package byog.Core;
 
-import byog.TileEngine.TERenderer;
+//import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Game {
-    private TERenderer ter = new TERenderer();
+//    private TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -78,9 +78,10 @@ public class Game {
                         doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
                         continue;
                     }
-                    case 'U': {
-                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
-                    }
+//                    case 'U': {
+//                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
+//                        continue;
+//                    }
                     default: {
                         doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
                     }
@@ -151,7 +152,7 @@ public class Game {
         initialize(input);
         initializeTiles(world);
         generateWorld();
-        ter.renderFrame(world);
+//        ter.renderFrame(world);
     }
 
     private void generateWorld() {
@@ -164,7 +165,7 @@ public class Game {
         long seed = findSeed(input);
         RANDOM = new Random(seed);
         rooms = new Stack<>();
-        ter.initialize(WIDTH, HEIGHT);
+//        ter.initialize(WIDTH, HEIGHT);
 
         world = new TETile[WIDTH][HEIGHT];
     }
