@@ -1,6 +1,6 @@
 package byog.Core;
 
-//import byog.TileEngine.TERenderer;
+import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Stack;
 
 public class Game {
-//    private TERenderer ter = new TERenderer();
+    private TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -35,78 +35,73 @@ public class Game {
             randomDoorPosition();
         }
 
-//        private void randomDoorPosition() {
-//            doorPs = new Position[doorNum];
-//            for (int i = 0; i < doorNum; i += 1) {
-//                switch (chooseDoorDir()) {
-//                    case 'D' -> doorPs[i] = new Position
-//                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
-//                    case 'L' -> doorPs[i] = new Position
-//                    (p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-//                    case 'R' -> doorPs[i] = new Position
-//                    (p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
-//                    default -> doorPs[i] = new Position
-//                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
-//                }
-//            }
-//        }
-//
-//        private char chooseDoorDir() {
-//            int r = RandomUtils.uniform(RANDOM, 4);
-//            return switch (r) {
-//                case 1 -> 'D';
-//                case 2 -> 'L';
-//                case 3 -> 'R';
-//                default -> 'U';
-//            };
-//        }
-
-        /**above can't passed in auto grader*/
         private void randomDoorPosition() {
             doorPs = new Position[doorNum];
             for (int i = 0; i < doorNum; i += 1) {
                 switch (chooseDoorDir()) {
-                    case 'D': {
-                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p1.y);
-                        continue;
-                    }
-                    case 'L': {
-                        doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
-                        continue;
-                    }
-                    case 'R': {
-                        doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
-                        continue;
-                    }
-//                    case 'U': {
-//                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
-//                        continue;
-//                    }
-                    default: {
-                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
-                    }
+                    case 'D' -> doorPs[i] = new Position
+                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p1.y);
+                    case 'L' -> doorPs[i] = new Position
+                    (p1.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                    case 'R' -> doorPs[i] = new Position
+                    (p2.x, RandomUtils.uniform(RANDOM, p1.y,p2.y));
+                    default -> doorPs[i] = new Position
+                    (RandomUtils.uniform(RANDOM, p1.x,p2.x), p2.y);
                 }
             }
         }
 
         private char chooseDoorDir() {
             int r = RandomUtils.uniform(RANDOM, 4);
-            switch (r) {
-                case 1: {
-                    return 'D';
-                }
-                case 2: {
-                    return 'L';
-                }
-                case 3: {
-                    return 'R';
-                }
-                case 0: {
-                    return 'U';
-                }
-                default: return 'U';
-            }
+            return switch (r) {
+                case 1 -> 'D';
+                case 2 -> 'L';
+                case 3 -> 'R';
+                default -> 'U';
+            };
         }
+
+        /**above can't passed in auto grader, below can pass. But i don't like it*/
+//        private void randomDoorPosition() {
+//            doorPs = new Position[doorNum];
+//            for (int i = 0; i < doorNum; i += 1) {
+//                switch (chooseDoorDir()) {
+//                    case 'D': {
+//                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p1.y);
+//                        continue;
+//                    }
+//                    case 'L': {
+//                        doorPs[i] = new Position(p1.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
+//                        continue;
+//                    }
+//                    case 'R': {
+//                        doorPs[i] = new Position(p2.x, RandomUtils.uniform(RANDOM, p1.y, p2.y));
+//                        continue;
+//                    }
+//                    default: {
+//                        doorPs[i] = new Position(RandomUtils.uniform(RANDOM, p1.x, p2.x), p2.y);
+//                    }
+//                }
+//            }
+//        }
+//        private char chooseDoorDir() {
+//            int r = RandomUtils.uniform(RANDOM, 4);
+//            switch (r) {
+//                case 1: {
+//                    return 'D';
+//                }
+//                case 2: {
+//                    return 'L';
+//                }
+//                case 3: {
+//                    return 'R';
+//                }
+//                case 0: {
+//                    return 'U';
+//                }
+//                default: return 'U';
+//            }
+//        }
 
         public void addRoom() {
             for (int i = p1.x; i <= p2.x; i += 1) {
@@ -146,13 +141,13 @@ public class Game {
     }
 
     private void play(char op, String input) {
-        if (op != 'N') {
+        if (op != 'N' & op != 'n') {
             throw new IllegalArgumentException("invalid argument: press N to begin.");
         }
         initialize(input);
         initializeTiles(world);
         generateWorld();
-//        ter.renderFrame(world);
+        ter.renderFrame(world);
     }
 
     private void generateWorld() {
@@ -165,7 +160,7 @@ public class Game {
         long seed = findSeed(input);
         RANDOM = new Random(seed);
         rooms = new Stack<>();
-//        ter.initialize(WIDTH, HEIGHT);
+        ter.initialize(WIDTH, HEIGHT);
 
         world = new TETile[WIDTH][HEIGHT];
     }
@@ -177,7 +172,6 @@ public class Game {
     }
 
     private void addCorridor(Room r1, Room r2) {
-//        double d = RandomUtils.uniform(RANDOM);
         if (r1.doorPs[0].x >= r2.doorPs[0].x) {
             for (int i = r1.doorPs[0].x; i >= r2.doorPs[0].x; i -= 1) {
                 world[i][r1.doorPs[0].y] = randomFloor();
@@ -226,7 +220,6 @@ public class Game {
             }
         }
         return false;
-//        return world[i][j].equals(Tileset.FLOOR);
     }
 
     private void removeWall() {
@@ -276,8 +269,8 @@ public class Game {
     }
 
     private char findOption(String input) {
-//        return input.charAt(0);
-        return 'N';
+        return input.charAt(0);
+//        return 'N';
     }
 
     private void initializeTiles(TETile[][] finalWorldFrame) {
