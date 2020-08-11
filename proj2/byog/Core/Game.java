@@ -269,10 +269,9 @@ public class Game {
      * @source: https://stackoverflow.com/questions/5585779
      * */
     private long findSeed(String input) {
-//        String[] parts = input.split("N");
-//        String[] op = parts[1].split("L");
-//        return Integer.parseInt(op[0]);
-        return Integer.parseInt(input);
+        String[] parts = input.split("n");
+        String[] op = parts[1].split("s");
+        return Long.parseLong(op[0]);
     }
 
     private char findOption(String input) {
