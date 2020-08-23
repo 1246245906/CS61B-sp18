@@ -1,5 +1,7 @@
 package byog.lab6;
 
+import byog.Core.RandomUtils;
+import edu.princeton.cs.introcs.Draw;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.Color;
@@ -7,6 +9,7 @@ import java.awt.Font;
 import java.util.Random;
 
 public class MemoryGame {
+    private static int seed;
     private int width;
     private int height;
     private int round;
@@ -24,7 +27,7 @@ public class MemoryGame {
             return;
         }
 
-        int seed = Integer.parseInt(args[0]);
+        seed = Integer.parseInt(args[0]);
         MemoryGame game = new MemoryGame(40, 40);
         game.startGame();
     }
@@ -47,28 +50,82 @@ public class MemoryGame {
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i += 1) {
+            sb.append(CHARACTERS[RandomUtils.uniform(rand, 0, 25)]);
+        }
+        return sb.toString();
     }
 
     public void drawFrame(String s) {
-        //TODO: Take the string and display it in the center of the screen
-        //TODO: If game is not over, display relevant game information at the top of the screen
+        Font font = new Font("a", Font.BOLD, 30);
+        StdDraw.setFont(font);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text((int)(width / 2), (int)(height / 2), s);
+        if (!gameOver) {
+            setTopInfo();
+        }
+        setTopInfo();
+        StdDraw.show();
+    }
+
+    private void setTopInfo() {
+        Font font1 = new Font("a", Font.BOLD, 20);
+        StdDraw.setFont(font1);
+        StdDraw.text((int)(width / 2), height - 1, playerTurn ? "Type!" : "Watch");
+        StdDraw.textLeft(0, height - 1, "Round: " + round);
+        StdDraw.textRight(width, height - 1, ENCOURAGEMENT[round % ENCOURAGEMENT.length]);
+        StdDraw.line(0, height - 2, width, height - 2);
     }
 
     public void flashSequence(String letters) {
-        //TODO: Display each character in letters, making sure to blank the screen between letters
+        for (int i = 0; i < letters.length(); i += 1) {
+            drawFrame(letters.substring(i, i + 1));
+            StdDraw.pause(750);
+            drawFrame("");
+            StdDraw.pause(750);
+        }
     }
 
     public String solicitNCharsInput(int n) {
-        //TODO: Read n letters of player input
-        return null;
+        StringBuilder sb = new StringBuilder();
+        while (sb.length() < n) {
+            while (!StdDraw.hasNextKeyTyped());
+            char key = StdDraw.nextKeyTyped();
+            sb.append(key);
+            drawFrame(sb.toString());
+            StdDraw.pause(20);
+        }
+        StdDraw.pause(500);
+        return sb.toString();
     }
 
     public void startGame() {
-        //TODO: Set any relevant variables before the game starts
+        rand = new Random(seed);
+        gameOver = false;
+        round = 1;
+        playerTurn = false;
 
-        //TODO: Establish Game loop
+        for (; round < 26; round += 1) {
+            playerTurn = false;
+            drawFrame("Round " + round + "! Good Luck!");
+            StdDraw.pause(750);
+            String randStr = generateRandomString(round);
+            flashSequence(randStr);
+            playerTurn = true;
+            drawFrame("");
+            String handStr = solicitNCharsInput(round);
+            if (!randStr.equals(handStr)) {
+                gameOver = true;
+                break;
+            }
+            drawFrame("Correct! Well done");
+            StdDraw.pause(750);
+            drawFrame("");
+            StdDraw.pause(500);
+        }
+        drawFrame("Game Over! Final Level: " + round);
     }
 
 }
