@@ -55,11 +55,14 @@ public class UnionFind {
         if (root1 == root2) {
             return;
         }
-        if (sizeOf1 <= sizeOf2) {
+        if (sizeOf1 == sizeOf2) {
+            disjointSets[Math.max(root1, root2)] = Math.min(root1, root2);
+            disjointSets[Math.min(root1, root2)] = - sizeOf1 - sizeOf2;
+        } else if (sizeOf1 < sizeOf2) {
             disjointSets[root1] = v2;
             disjointSets[root2] = - sizeOf1 - sizeOf2;
         } else {
-            disjointSets[root2] = v1;
+            disjointSets[root2] = root1;
             disjointSets[root1] = - sizeOf1 - sizeOf2;
         }
     }
@@ -78,11 +81,15 @@ public class UnionFind {
 
     public static void main(String[] args) {
         UnionFind uf = new UnionFind(100);
-        System.out.println(uf.connected(1, 3));
-        uf.union(1,3);
-        System.out.println(uf.connected(1, 3));
-        System.out.println(uf.connected(1, 2));
-        uf.union(1, 2);
-        System.out.println(uf.connected(1, 2));
+        uf.union(2, 3);
+        uf.union(1, 6);
+        uf.union(5, 7);
+        uf.union(8, 4);
+        uf.union(7, 2);
+        uf.find(3);
+        uf.union(6, 4);
+        uf.union(6, 3);
+        uf.find(7);
+        uf.find(8);
     }
 }
